@@ -24,7 +24,7 @@ router.post('/forgot-password', authController.forgotPassword);
 router.post('/reset-password', authController.resetPassword);
 
 // Resend verification email route
-router.post('/resend-verification-email', emailController.resendVerificationEmail);
+router.post('/resend-verification-email', authController.resendVerificationEmail);
 
 // Resend verification phone route
 router.post('/resend-verification-phone', authController.resendVerificationPhone);
