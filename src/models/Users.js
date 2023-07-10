@@ -41,6 +41,10 @@ const User_Schema = new mongoose.Schema({
     username: {
         type: String
     },
+    blocked: {
+        type: Boolean,
+        default: false
+      }, 
 })
 
 const users = new mongoose.model('users', User_Schema);

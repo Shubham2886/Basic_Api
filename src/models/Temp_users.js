@@ -30,7 +30,12 @@ const Temp_User_Schema = new mongoose.Schema({
     status: {
         type: Boolean,       
         default: false
-    }
+    },
+    blocked: {
+        type: Boolean,
+        default: false
+      },
+
 })
 
 const tusers = new mongoose.model('tusers', Temp_User_Schema);

@@ -1,6 +1,8 @@
 require("dotenv").config();
 require("../src/config/db").connect();
 const express = require('express');
+const adminRoutes = require('../src/routes/adminRoutes');
+
 
 const mongoose = require('mongoose');
 const authRoutes = require('../src/routes/authRroute');
@@ -15,6 +17,7 @@ const authMiddleware = require('./middleware/authMiddleware');
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
