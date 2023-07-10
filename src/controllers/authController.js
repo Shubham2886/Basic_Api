@@ -2,6 +2,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/Users');
 const tusers = require('../models/Temp_users');
+const LoginEntry = require('../models/LoginEntry');
+const users = require('../models/Users');
 
 // Signup controller
 const signup = async (req, res) => {
@@ -28,6 +30,8 @@ const signup = async (req, res) => {
     // Hash the password using bcrypt
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    const blocked = false;
+
     // Create a new user
     const newUser = new tusers({
       fullname,
@@ -36,6 +40,7 @@ const signup = async (req, res) => {
       phone_no,
       login_signup_otp_email,
       login_signup_otp_phone,
+      blocked,
     });
 
     // Save the user to the database
@@ -53,7 +58,7 @@ const login = async (req, res) => {
     const { email, password } = req.body;
 
     // Find the user by email
-    const user = await tusers.findOne({ email });
+    const user = await users.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -66,6 +71,10 @@ const login = async (req, res) => {
 
     // Generate a JWT token
     const token = jwt.sign({ userId: user._id }, 'secret-key', { expiresIn: '1h' });
+
+      // Create a new login entry
+    const loginEntry = new LoginEntry({ userId: user._id });
+    await loginEntry.save();
 
     res.status(200).json({ message: 'Login successful', token });
   } catch (error) {
@@ -110,6 +119,8 @@ const verifyEmail = async (req, res) => {
     
       // Save the new user to the main user collection
       await newUser.save();
+
+      
       
 
       // Delete the temporary user
